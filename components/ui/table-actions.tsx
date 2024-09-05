@@ -21,12 +21,18 @@ export const TableActions = ({
   enumsOptions,
   identfier,
   refresh,
+  endpoints,
 }: {
   row: { [key: PropertyKey]: any };
   types: Types;
   enumsOptions?: { [key: PropertyKey]: string[] };
   identfier: string;
   refresh: () => void;
+  endpoints?: {
+    edit: string;
+    delete: string;
+    getDetails: string;
+  };
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
@@ -46,9 +52,7 @@ export const TableActions = ({
     mutate: getUserDetailsMutate,
   } = useMutation({
     mutationFn: async (params: { id: string }) => {
-      return AxiosInstance.get(
-        `${baseURL}${Endpoints.getUserDetails}${params.id}`
-      );
+      return AxiosInstance.get(`${endpoints?.getDetails}${params.id}`);
     },
   });
 
@@ -75,9 +79,7 @@ export const TableActions = ({
     mutate: deleteUserMutate,
   } = useMutation({
     mutationFn: async (params: { id: string }) => {
-      return AxiosInstance.delete(
-        `${baseURL}${Endpoints.deleteUser}${params.id}`
-      );
+      return AxiosInstance.delete(`${endpoints?.delete}${params.id}`);
     },
   });
 
@@ -132,6 +134,7 @@ export const TableActions = ({
         types={types}
         identfier={identfier}
         enumsOptions={enumsOptions}
+        editEndpoint={endpoints?.edit}
         refresh={refresh}
       />
 

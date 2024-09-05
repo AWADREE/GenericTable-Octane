@@ -25,6 +25,7 @@ export const EditModal = ({
   enumsOptions,
   identfier,
   refresh,
+  editEndpoint,
 }: {
   row: { [key: PropertyKey]: any };
   isOpen: boolean;
@@ -33,6 +34,7 @@ export const EditModal = ({
   types: Types;
   identfier: string;
   refresh: () => void;
+  editEndpoint?: string;
   enumsOptions?: { [key: PropertyKey]: string[] };
 }) => {
   const [editableRowDetails, setEditableRowDetails] = useState<{
@@ -59,7 +61,7 @@ export const EditModal = ({
   } = useMutation({
     mutationFn: async (params: { id: string; updatedObject: any }) => {
       return AxiosInstance.put(
-        `${baseURL}${Endpoints.updateUser}${params.id}`,
+        `${editEndpoint}${params.id}`,
         params.updatedObject
       );
     },

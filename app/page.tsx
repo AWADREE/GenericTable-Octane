@@ -49,12 +49,6 @@ export default function page() {
     <>
       <GenericTable
         specialFields={[
-          // {
-          //   specialFieldName: "account_name",
-          //   rendering: (row) => (
-          //     <p style={{ color: "red" }}> {row.account_name} </p>
-          //   ),
-          // },
           {
             specialFieldName: "Actions",
             rendering: (row, types, identfier, enumsOptions) => (
@@ -63,6 +57,11 @@ export default function page() {
                 types={types}
                 enumsOptions={enumsOptions}
                 identfier={identfier}
+                endpoints={{
+                  edit: `${baseURL}${Endpoints.updateUser}`,
+                  delete: `${baseURL}${Endpoints.deleteUser}`,
+                  getDetails: `${baseURL}${Endpoints.getUserDetails}`,
+                }}
                 refresh={getUsersMutate}
               />
             ),
