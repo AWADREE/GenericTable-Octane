@@ -36,7 +36,7 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
   extraColumns = [],
 }: GenericTableProps<T>) => {
   const headers =
-    data.length > 0 ? [...Object.keys(data[0]), ...extraColumns] : [];
+    data?.length > 0 ? [...Object?.keys(data[0]), ...extraColumns] : [];
 
   const allSpecialFieldNames = specialFields?.map((field) => {
     return field.specialFieldName;
@@ -54,13 +54,13 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 8;
 
-  const pages = Math.ceil(data.length / rowsPerPage);
+  const pages = Math.ceil(data?.length / rowsPerPage);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return data.slice(start, end);
+    return data?.slice(start, end);
   }, [page, data]);
 
   return (
@@ -86,21 +86,21 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
           selectionMode="multiple"
         >
           <TableHeader>
-            {headers.map((header) => (
+            {headers?.map((header) => (
               <TableColumn key={header}>{header}</TableColumn>
             ))}
           </TableHeader>
           <TableBody>
-            {items.map((row, rowIndex) => (
+            {items?.map((row, rowIndex) => (
               <TableRow key={rowIndex} style={{ cursor: "pointer" }}>
-                {headers.map((header) => {
+                {headers?.map((header) => {
                   const cellValue = row[header];
                   const columnType = types[header] || ColumnType.Text;
 
                   let cellContent;
 
                   const specialObject = specialFields?.find((item) => {
-                    return item.specialFieldName === header;
+                    return item?.specialFieldName === header;
                   });
 
                   if (allSpecialFieldNames?.includes(header)) {

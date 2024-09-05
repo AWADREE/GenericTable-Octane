@@ -3,7 +3,7 @@ import { baseURL } from "./baseURL";
 
 const AxiosInstance = axios.create({
   baseURL: baseURL,
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 AxiosInstance.interceptors.request.use(
