@@ -9,6 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
+import { Checkbox } from "@nextui-org/checkbox";
 import { useState } from "react";
 
 export const EditModal = ({
@@ -91,6 +92,17 @@ export const EditModal = ({
                             );
                           })}
                         </Autocomplete>
+                      );
+                      break;
+                    case ColumnType.Boolean:
+                      renderedField = (
+                        <div className="flex items-center justify-between">
+                          <span className="mr-2">{key}</span>
+                          <Checkbox
+                            defaultSelected={value}
+                            onChange={(e) => handleChange(key, e.target.value)}
+                          />
+                        </div>
                       );
                       break;
                     default:
