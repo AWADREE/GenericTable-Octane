@@ -103,34 +103,6 @@ export default function page() {
     }
   }, [deleteUserResponse]);
   //-------------------------------------------------------------------------------------------
-  //-----------------------useMutation hook to get a user details --------------------------------
-  const {
-    data: getUserDetailsResponse,
-    isPending: getUserDetailsIsPending,
-    isSuccess: getUserDetailsIsSuccess,
-    isError: getUserDetailsIsError,
-    error: getUserDetailsError,
-    mutate: getUserDetailsMutate,
-  } = useMutation({
-    mutationFn: async (params: { id: string }) => {
-      return AxiosInstance.get(
-        `${baseURL}${Endpoints.getUserDetails}${params.id}`
-      );
-    },
-  });
-
-  const getUserDetails = (orderId: string) => {
-    getUserDetailsMutate({
-      id: orderId,
-    });
-  };
-
-  useEffect(() => {
-    if (getUserDetailsResponse) {
-      console.log(getUserDetailsResponse);
-    }
-  }, [getUserDetailsResponse]);
-  //-------------------------------------------------------------------------------------------
 
   return (
     <>
@@ -144,11 +116,12 @@ export default function page() {
           // },
           {
             specialFieldName: "Actions",
-            rendering: (row, types, enumsOptions) => (
+            rendering: (row, types, identfier, enumsOptions) => (
               <TableActions
                 row={row}
                 types={types}
                 enumsOptions={enumsOptions}
+                identfier={identfier}
               />
             ),
           },
@@ -160,11 +133,12 @@ export default function page() {
           username: ColumnType.Text,
           email: ColumnType.Text,
           role: ColumnType.Enum,
-          active: ColumnType.Boolean, //TODO made a bool type
+          active: ColumnType.Boolean,
         }}
         enumsOptions={{
           role: ["admin", "user", "guest"],
         }}
+        identfier="user_id"
       />
     </>
   );

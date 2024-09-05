@@ -1,6 +1,7 @@
 import { ColumnType, Types } from "@/types/generic-table.type";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Button } from "@nextui-org/button";
+import { Checkbox } from "@nextui-org/checkbox";
 import { Input } from "@nextui-org/input";
 import {
   Modal,
@@ -9,7 +10,6 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import { Checkbox } from "@nextui-org/checkbox";
 import { useState } from "react";
 
 export const EditModal = ({

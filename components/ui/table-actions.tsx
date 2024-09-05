@@ -9,15 +9,22 @@ import {
 import { useDisclosure } from "@nextui-org/modal";
 import { ConfirmationModal } from "./confirmation-modal";
 import { EditModal } from "./edit-modal";
+import { useMutation } from "@tanstack/react-query";
+import AxiosInstance from "@/api/axiosInstance";
+import { baseURL } from "@/api/baseURL";
+import Endpoints from "@/api/Endpoints";
+import { useEffect } from "react";
 
 export const TableActions = ({
   row,
   types,
   enumsOptions,
+  identfier,
 }: {
   row: { [key: PropertyKey]: any };
   types: Types;
   enumsOptions?: { [key: PropertyKey]: string[] };
+  identfier: string;
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
@@ -26,6 +33,35 @@ export const TableActions = ({
     onOpenChange: onOpenChangeDelete,
     onClose: onCloseDelete,
   } = useDisclosure();
+
+  //-----------------------useMutation hook to get a user details --------------------------------
+  const {
+    data: getUserDetailsResponse,
+    isPending: getUserDetailsIsPending,
+    isSuccess: getUserDetailsIsSuccess,
+    isError: getUserDetailsIsError,
+    error: getUserDetailsError,
+    mutate: getUserDetailsMutate,
+  } = useMutation({
+    mutationFn: async (params: { id: string }) => {
+      return AxiosInstance.get(
+        `${baseURL}${Endpoints.getUserDetails}${params.id}`
+      );
+    },
+  });
+
+  const getUserDetails = (orderId: string) => {
+    getUserDetailsMutate({
+      id: orderId,
+    });
+  };
+
+  useEffect(() => {
+    if (getUserDetailsResponse) {
+      console.log(getUserDetailsResponse);
+    }
+  }, [getUserDetailsResponse]);
+  //-------------------------------------------------------------------------------------------
 
   return (
     <>
@@ -36,7 +72,13 @@ export const TableActions = ({
           </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions">
-          <DropdownItem onClick={() => onOpen()} key="edit">
+          <DropdownItem
+            onClick={() => {
+              getUserDetails(row[identfier]);
+              onOpen();
+            }}
+            key="edit"
+          >
             Edit
           </DropdownItem>
           <DropdownItem
@@ -51,7 +93,7 @@ export const TableActions = ({
       </Dropdown>
 
       <EditModal
-        row={row}
+        row={getUserDetailsResponse?.data}
         isOpen={isOpen}
         onOpen={onOpen}
         onOpenChange={onOpenChange}

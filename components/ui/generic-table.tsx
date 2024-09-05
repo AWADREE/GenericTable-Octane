@@ -21,11 +21,13 @@ type GenericTableProps<T extends Record<PropertyKey, any>> = {
     rendering: (
       row: { [key: PropertyKey]: any },
       types: Types,
+      identfier: string,
       enumsOptions?: { [key: PropertyKey]: string[] }
     ) => ReactNode;
   }[];
   enumsOptions?: { [key: PropertyKey]: string[] };
   extraColumns?: string[];
+  identfier: string;
 };
 
 const GenericTable = <T extends Record<PropertyKey, any>>({
@@ -34,6 +36,7 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
   specialFields,
   enumsOptions = {},
   extraColumns = [],
+  identfier,
 }: GenericTableProps<T>) => {
   const headers =
     data?.length > 0 ? [...Object?.keys(data[0]), ...extraColumns] : [];
@@ -106,7 +109,12 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
                   if (allSpecialFieldNames?.includes(header)) {
                     return (
                       <TableCell>
-                        {specialObject?.rendering(row, types, enumsOptions)}
+                        {specialObject?.rendering(
+                          row,
+                          types,
+                          identfier,
+                          enumsOptions
+                        )}
                       </TableCell>
                     );
                   }
