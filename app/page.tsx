@@ -9,15 +9,15 @@ import AxiosInstance from "@/api/axiosInstance";
 import { baseURL } from "@/api/baseURL";
 import Endpoints from "@/api/Endpoints";
 
-const exampleData = [
-  {
-    user_id: 1,
-    username: "name",
-    email: "name@email.com",
-    role: "user",
-    active: true,
-  },
-];
+// const exampleData = [
+//   {
+//     user_id: 1,
+//     username: "name",
+//     email: "name@email.com",
+//     role: "user",
+//     active: true,
+//   },
+// ];
 
 export default function page() {
   ////------------------useMutation hook to get all users ------------------------------
@@ -45,65 +45,6 @@ export default function page() {
   }, [getUsersResponse]);
   //-------------------------------------------------------------------------------------------
 
-  //-----------------------useMutation hook to update a user --------------------------------
-  const {
-    data: updateUserResponse,
-    isPending: updateUserIsPending,
-    isSuccess: updateUserIsSuccess,
-    isError: updateUserIsError,
-    error: updateUserError,
-    mutate: updateUserMutate,
-  } = useMutation({
-    mutationFn: async (params: { id: string; updatedObject: any }) => {
-      return AxiosInstance.put(
-        `${baseURL}${Endpoints.updateUser}${params.id}`,
-        params.updatedObject
-      );
-    },
-  });
-
-  const updateUser = (orderId: string, updatedObject: any) => {
-    updateUserMutate({
-      id: orderId,
-      updatedObject: {},
-    });
-  };
-
-  useEffect(() => {
-    if (updateUserResponse) {
-      console.log(updateUserResponse);
-    }
-  }, [updateUserResponse]);
-  //-------------------------------------------------------------------------------------------
-  //-----------------------useMutation hook to delete a user --------------------------------
-  const {
-    data: deleteUserResponse,
-    isPending: deleteUserIsPending,
-    isSuccess: deleteUserIsSuccess,
-    isError: deleteUserIsError,
-    error: deleteUserError,
-    mutate: deleteUserMutate,
-  } = useMutation({
-    mutationFn: async (params: { id: string }) => {
-      return AxiosInstance.delete(
-        `${baseURL}${Endpoints.deleteUser}${params.id}`
-      );
-    },
-  });
-
-  const deleteOrder = (orderId: string) => {
-    deleteUserMutate({
-      id: orderId,
-    });
-  };
-
-  useEffect(() => {
-    if (deleteUserResponse) {
-      console.log(deleteUserResponse);
-    }
-  }, [deleteUserResponse]);
-  //-------------------------------------------------------------------------------------------
-
   return (
     <>
       <GenericTable
@@ -122,6 +63,7 @@ export default function page() {
                 types={types}
                 enumsOptions={enumsOptions}
                 identfier={identfier}
+                refresh={getUsersMutate}
               />
             ),
           },

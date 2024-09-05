@@ -1,3 +1,6 @@
+import AxiosInstance from "@/api/axiosInstance";
+import { baseURL } from "@/api/baseURL";
+import Endpoints from "@/api/Endpoints";
 import { ColumnType, Types } from "@/types/generic-table.type";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Button } from "@nextui-org/button";
@@ -10,7 +13,8 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 export const EditModal = ({
   row,
@@ -19,12 +23,16 @@ export const EditModal = ({
   onOpen,
   types,
   enumsOptions,
+  identfier,
+  refresh,
 }: {
   row: { [key: PropertyKey]: any };
   isOpen: boolean;
   onOpenChange: () => void;
   onOpen: () => void;
   types: Types;
+  identfier: string;
+  refresh: () => void;
   enumsOptions?: { [key: PropertyKey]: string[] };
 }) => {
   const [editableRowDetails, setEditableRowDetails] = useState<{
@@ -39,6 +47,38 @@ export const EditModal = ({
       [key]: value,
     }));
   };
+
+  //-----------------------useMutation hook to update a user --------------------------------
+  const {
+    data: updateUserResponse,
+    isPending: updateUserIsPending,
+    isSuccess: updateUserIsSuccess,
+    isError: updateUserIsError,
+    error: updateUserError,
+    mutate: updateUserMutate,
+  } = useMutation({
+    mutationFn: async (params: { id: string; updatedObject: any }) => {
+      return AxiosInstance.put(
+        `${baseURL}${Endpoints.updateUser}${params.id}`,
+        params.updatedObject
+      );
+    },
+  });
+
+  const updateUser = (id: string, updatedObject: any) => {
+    updateUserMutate({
+      id,
+      updatedObject,
+    });
+  };
+
+  useEffect(() => {
+    if (updateUserResponse) {
+      console.log(updateUserResponse);
+      refresh();
+    }
+  }, [updateUserResponse]);
+  //-------------------------------------------------------------------------------------------
 
   return (
     <>
@@ -128,7 +168,13 @@ export const EditModal = ({
                 })}
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" onPress={onClose}>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    updateUser(row[identfier], editableRowDetails);
+                    onClose();
+                  }}
+                >
                   Save
                 </Button>
               </ModalFooter>

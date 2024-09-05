@@ -20,11 +20,13 @@ export const TableActions = ({
   types,
   enumsOptions,
   identfier,
+  refresh,
 }: {
   row: { [key: PropertyKey]: any };
   types: Types;
   enumsOptions?: { [key: PropertyKey]: string[] };
   identfier: string;
+  refresh: () => void;
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
@@ -63,6 +65,36 @@ export const TableActions = ({
   }, [getUserDetailsResponse]);
   //-------------------------------------------------------------------------------------------
 
+  //-----------------------useMutation hook to delete a user --------------------------------
+  const {
+    data: deleteUserResponse,
+    isPending: deleteUserIsPending,
+    isSuccess: deleteUserIsSuccess,
+    isError: deleteUserIsError,
+    error: deleteUserError,
+    mutate: deleteUserMutate,
+  } = useMutation({
+    mutationFn: async (params: { id: string }) => {
+      return AxiosInstance.delete(
+        `${baseURL}${Endpoints.deleteUser}${params.id}`
+      );
+    },
+  });
+
+  const deleteOrder = (id: string) => {
+    deleteUserMutate({
+      id,
+    });
+  };
+
+  useEffect(() => {
+    if (deleteUserResponse) {
+      console.log(deleteUserResponse);
+      refresh();
+    }
+  }, [deleteUserResponse]);
+  //-------------------------------------------------------------------------------------------
+
   return (
     <>
       <Dropdown>
@@ -98,7 +130,9 @@ export const TableActions = ({
         onOpen={onOpen}
         onOpenChange={onOpenChange}
         types={types}
+        identfier={identfier}
         enumsOptions={enumsOptions}
+        refresh={refresh}
       />
 
       <ConfirmationModal
@@ -109,7 +143,7 @@ export const TableActions = ({
         onClose={onCloseDelete}
         message="Are you sure you want to delete this record?"
         onConfirm={() => {
-          //TODO
+          deleteOrder(row[identfier]);
           console.log(row);
           console.log("record is deleted successfully!");
           onCloseDelete();
