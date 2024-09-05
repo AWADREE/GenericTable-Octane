@@ -3,6 +3,7 @@
 import React from "react";
 import GenericTable from "@/components/ui/generic-table";
 import { ColumnType } from "@/types/generic-table.type";
+import { TableActions } from "@/components/ui/table-actions";
 
 const exampleData = [
   {
@@ -11,6 +12,17 @@ const exampleData = [
     order_date: "2024-03-05T12:00:00",
     status: "Pending",
     total_amount: "150",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "2",
@@ -18,6 +30,17 @@ const exampleData = [
     order_date: "2024-04-10T12:00:00",
     status: "Shipped",
     total_amount: "200",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "3",
@@ -25,6 +48,17 @@ const exampleData = [
     order_date: "2024-01-22T12:00:00",
     status: "Delivered",
     total_amount: "75",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "4",
@@ -32,6 +66,17 @@ const exampleData = [
     order_date: "2024-05-30T12:00:00",
     status: "Canceled",
     total_amount: "120",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "5",
@@ -39,6 +84,17 @@ const exampleData = [
     order_date: "2024-02-15T12:00:00",
     status: "Pending",
     total_amount: "85",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "6",
@@ -46,6 +102,17 @@ const exampleData = [
     order_date: "2024-03-08T12:00:00",
     status: "Shipped",
     total_amount: "250",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "7",
@@ -53,6 +120,17 @@ const exampleData = [
     order_date: "2024-04-01T12:00:00",
     status: "Delivered",
     total_amount: "180",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "8",
@@ -60,6 +138,17 @@ const exampleData = [
     order_date: "2024-05-05T12:00:00",
     status: "Pending",
     total_amount: "95",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "9",
@@ -67,6 +156,17 @@ const exampleData = [
     order_date: "2024-06-12T12:00:00",
     status: "Shipped",
     total_amount: "130",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "10",
@@ -74,6 +174,17 @@ const exampleData = [
     order_date: "2024-07-19T12:00:00",
     status: "Delivered",
     total_amount: "220",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "11",
@@ -81,6 +192,17 @@ const exampleData = [
     order_date: "2024-03-08T12:00:00",
     status: "Shipped",
     total_amount: "250",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "12",
@@ -88,6 +210,17 @@ const exampleData = [
     order_date: "2024-04-01T12:00:00",
     status: "Delivered",
     total_amount: "180",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "13",
@@ -95,6 +228,17 @@ const exampleData = [
     order_date: "2024-05-05T12:00:00",
     status: "Pending",
     total_amount: "95",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "14",
@@ -102,6 +246,17 @@ const exampleData = [
     order_date: "2024-06-12T12:00:00",
     status: "Shipped",
     total_amount: "130",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
   {
     order_id: "15",
@@ -109,10 +264,27 @@ const exampleData = [
     order_date: "2024-07-19T12:00:00",
     status: "Delivered",
     total_amount: "220",
+    total_aount: "150",
+    total_amont: "150",
+    total_amoun: "150",
+    total_amout: "150",
+    total_amt: "150",
+    total_ount: "150",
+    total_aoun: "150",
+    total_aounf: "150",
+    total_aounwe: "150",
+    total_aouna: "150",
+    total_aasdoun: "150",
   },
 ];
 
-export default function page() {
+type paramsProps = {
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+};
+
+export default function page({ searchParams }: paramsProps) {
   return (
     <>
       <GenericTable
@@ -125,8 +297,12 @@ export default function page() {
           },
           {
             specialFieldName: "Actions",
-            rendering: (row) => (
-              <p style={{ color: "red" }}>{row.account_name}</p>
+            rendering: (row, types, enumsOptions) => (
+              <TableActions
+                row={row}
+                types={types}
+                enumsOptions={enumsOptions}
+              />
             ),
           },
         ]}
@@ -136,8 +312,11 @@ export default function page() {
           order_id: ColumnType.Text,
           customer_name: ColumnType.Text,
           order_date: ColumnType.Date,
-          status: ColumnType.Text,
+          status: ColumnType.Enum,
           total_amount: ColumnType.Number,
+        }}
+        enumsOptions={{
+          status: ["Canceled", "Pending", "Shipped", "Delivered"],
         }}
       />
     </>
