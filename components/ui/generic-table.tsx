@@ -8,22 +8,35 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/table";
-
+import {
+  Pagination,
+  // PaginationItem,
+  // PaginationCursor,
+} from "@nextui-org/pagination";
 type GenericTableProps<T extends Record<PropertyKey, any>> = {
   data: T[];
   types: Types;
   specialFields?: {
     specialFieldName: PropertyKey;
-    rendering: (row: { [key: PropertyKey]: any }, types: Types) => ReactNode;
+    rendering: (
+      row: { [key: PropertyKey]: any },
+      types: Types,
+      enumsOptions?: { [key: PropertyKey]: string[] }
+    ) => ReactNode;
   }[];
+  enumsOptions?: { [key: PropertyKey]: string[] };
+  extraColumns?: string[];
 };
 
 const GenericTable = <T extends Record<PropertyKey, any>>({
   data,
   types,
   specialFields,
+  enumsOptions = {},
+  extraColumns = [],
 }: GenericTableProps<T>) => {
-  const headers = data.length > 0 ? Object.keys(data[0]) : [];
+  const headers =
+    data.length > 0 ? [...Object.keys(data[0]), ...extraColumns] : [];
 
   const allSpecialFieldNames = specialFields?.map((field) => {
     return field.specialFieldName;
@@ -38,17 +51,47 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
     []
   );
 
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 8;
+
+  const pages = Math.ceil(data.length / rowsPerPage);
+
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return data.slice(start, end);
+  }, [page, data]);
+
   return (
     <>
       <div>
-        <Table classNames={classNames} isCompact selectionMode="multiple">
+        <Table
+          bottomContent={
+            <div className="flex w-full justify-center fixed bottom-12">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="primary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          }
+          classNames={classNames}
+          isCompact
+          // removeWrapper
+          selectionMode="multiple"
+        >
           <TableHeader>
             {headers.map((header) => (
               <TableColumn key={header}>{header}</TableColumn>
             ))}
           </TableHeader>
           <TableBody>
-            {data.map((row, rowIndex) => (
+            {items.map((row, rowIndex) => (
               <TableRow key={rowIndex} style={{ cursor: "pointer" }}>
                 {headers.map((header) => {
                   const cellValue = row[header];
@@ -63,7 +106,7 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
                   if (allSpecialFieldNames?.includes(header)) {
                     return (
                       <TableCell>
-                        {specialObject?.rendering(row, types)}
+                        {specialObject?.rendering(row, types, enumsOptions)}
                       </TableCell>
                     );
                   }
