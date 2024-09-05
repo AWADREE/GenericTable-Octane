@@ -3,6 +3,7 @@ export enum ColumnType {
   Number = "number",
   Date = "date",
   JSX = "jsx",
+  Enum = "enum",
 }
 
 export type Types = {
