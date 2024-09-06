@@ -68,7 +68,9 @@ export default function page() {
           },
         ]}
         extraColumns={["Actions"]}
-        data={getUsersResponse?.data ? getUsersResponse.data : [{ "-": "-" }]}
+        data={
+          getUsersResponse?.data ? getUsersResponse.data : [{ user_id: "0" }]
+        }
         types={{
           user_id: ColumnType.Text,
           username: ColumnType.Text,

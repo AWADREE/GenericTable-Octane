@@ -1,7 +1,10 @@
 export default Object.freeze({
-  orders: "orders",
   getAllUsers: "users",
   getUserDetails: "users/",
   updateUser: "users/",
   deleteUser: "users/",
+  getAllOrders: "orders",
+  getOrderDetails: "orders/",
+  updateOrder: "orders/",
+  deleteOrder: "orders/",
 });

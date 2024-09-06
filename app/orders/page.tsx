@@ -20,7 +20,7 @@ export default function page() {
     mutate: getOrdersMutate,
   } = useMutation({
     mutationFn: async () => {
-      return AxiosInstance.get(`${baseURL}${Endpoints.getAllUsers}`);
+      return AxiosInstance.get(`${baseURL}${Endpoints.getAllOrders}`);
     },
   });
 
@@ -48,9 +48,9 @@ export default function page() {
                 enumsOptions={enumsOptions}
                 identfier={identfier}
                 endpoints={{
-                  edit: `${baseURL}${Endpoints.updateUser}`,
-                  delete: `${baseURL}${Endpoints.deleteUser}`,
-                  getDetails: `${baseURL}${Endpoints.getUserDetails}`,
+                  edit: `${baseURL}${Endpoints.updateOrder}`,
+                  delete: `${baseURL}${Endpoints.deleteOrder}`,
+                  getDetails: `${baseURL}${Endpoints.getOrderDetails}`,
                 }}
                 refresh={getOrdersMutate}
               />
@@ -58,7 +58,9 @@ export default function page() {
           },
         ]}
         extraColumns={["Actions"]}
-        data={getOrdersResponse?.data ? getOrdersResponse.data : [{}]}
+        data={
+          getOrdersResponse?.data ? getOrdersResponse.data : [{ order_id: "0" }]
+        }
         types={{
           order_id: ColumnType.Text,
           customer_name: ColumnType.Text,
@@ -69,7 +71,7 @@ export default function page() {
         enumsOptions={{
           status: ["Canceled", "Pending", "Shipped", "Delivered"],
         }}
-        identfier="user_id"
+        identfier="order_id"
       />
     </>
   );
