@@ -1,6 +1,10 @@
+import AxiosInstance from "@/api/axiosInstance";
+import { baseURL } from "@/api/baseURL";
+import Endpoints from "@/api/Endpoints";
 import { ColumnType, Types } from "@/types/generic-table.type";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Button } from "@nextui-org/button";
+import { Checkbox } from "@nextui-org/checkbox";
 import { Input } from "@nextui-org/input";
 import {
   Modal,
@@ -9,7 +13,8 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 export const EditModal = ({
   row,
@@ -18,12 +23,18 @@ export const EditModal = ({
   onOpen,
   types,
   enumsOptions,
+  identfier,
+  refresh,
+  editEndpoint,
 }: {
   row: { [key: PropertyKey]: any };
   isOpen: boolean;
   onOpenChange: () => void;
   onOpen: () => void;
   types: Types;
+  identfier: string;
+  refresh: () => void;
+  editEndpoint?: string;
   enumsOptions?: { [key: PropertyKey]: string[] };
 }) => {
   const [editableRowDetails, setEditableRowDetails] = useState<{
@@ -31,13 +42,42 @@ export const EditModal = ({
   }>();
 
   const handleChange = (key: string, value: any) => {
-    if (!editableRowDetails) return;
-
     setEditableRowDetails((prev: { [key: PropertyKey]: any }) => ({
       ...prev,
       [key]: value,
     }));
   };
+
+  //-----------------------useMutation hook to update an object --------------------------------
+  const {
+    data: updateObjectResponse,
+    isPending: updateObjectIsPending,
+    isSuccess: updateObjectIsSuccess,
+    isError: updateObjectIsError,
+    error: updateObjectError,
+    mutate: updateObjectMutate,
+  } = useMutation({
+    mutationFn: async (params: { id: string; updatedObject: any }) => {
+      return AxiosInstance.put(
+        `${editEndpoint}${params.id}`,
+        params.updatedObject
+      );
+    },
+  });
+
+  const updateUser = (id: string, updatedObject: any) => {
+    updateObjectMutate({
+      id,
+      updatedObject: { ...row, ...updatedObject },
+    });
+  };
+
+  useEffect(() => {
+    if (updateObjectResponse) {
+      refresh();
+    }
+  }, [updateObjectResponse]);
+  //-------------------------------------------------------------------------------------------
 
   return (
     <>
@@ -81,7 +121,9 @@ export const EditModal = ({
                           labelPlacement={"outside"}
                           label={key}
                           defaultInputValue={value}
-                          onChange={(e) => handleChange(key, e.target.value)}
+                          onInputChange={(selectedValue) =>
+                            handleChange(key, selectedValue)
+                          }
                         >
                           {enumsOptions![key]?.map((option: string) => {
                             return (
@@ -91,6 +133,19 @@ export const EditModal = ({
                             );
                           })}
                         </Autocomplete>
+                      );
+                      break;
+                    case ColumnType.Boolean:
+                      renderedField = (
+                        <div className="flex items-center justify-between">
+                          <span className="mr-2">{key}</span>
+                          <Checkbox
+                            defaultSelected={value}
+                            onChange={(isSelected) =>
+                              handleChange(key, isSelected.target.checked)
+                            }
+                          />
+                        </div>
                       );
                       break;
                     default:
@@ -116,7 +171,13 @@ export const EditModal = ({
                 })}
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" onPress={onClose}>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    updateUser(row[identfier], editableRowDetails);
+                    onClose();
+                  }}
+                >
                   Save
                 </Button>
               </ModalFooter>
