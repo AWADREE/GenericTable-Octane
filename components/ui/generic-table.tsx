@@ -31,7 +31,7 @@ type GenericTableProps<T extends Record<PropertyKey, any>> = {
 };
 
 const GenericTable = <T extends Record<PropertyKey, any>>({
-  data,
+  data = [],
   types,
   specialFields,
   enumsOptions = {},
