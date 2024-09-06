@@ -42,22 +42,20 @@ export const EditModal = ({
   }>();
 
   const handleChange = (key: string, value: any) => {
-    if (!editableRowDetails) return;
-
     setEditableRowDetails((prev: { [key: PropertyKey]: any }) => ({
       ...prev,
       [key]: value,
     }));
   };
 
-  //-----------------------useMutation hook to update a user --------------------------------
+  //-----------------------useMutation hook to update an object --------------------------------
   const {
-    data: updateUserResponse,
-    isPending: updateUserIsPending,
-    isSuccess: updateUserIsSuccess,
-    isError: updateUserIsError,
-    error: updateUserError,
-    mutate: updateUserMutate,
+    data: updateObjectResponse,
+    isPending: updateObjectIsPending,
+    isSuccess: updateObjectIsSuccess,
+    isError: updateObjectIsError,
+    error: updateObjectError,
+    mutate: updateObjectMutate,
   } = useMutation({
     mutationFn: async (params: { id: string; updatedObject: any }) => {
       return AxiosInstance.put(
@@ -68,18 +66,17 @@ export const EditModal = ({
   });
 
   const updateUser = (id: string, updatedObject: any) => {
-    updateUserMutate({
+    updateObjectMutate({
       id,
-      updatedObject,
+      updatedObject: { ...row, ...updatedObject },
     });
   };
 
   useEffect(() => {
-    if (updateUserResponse) {
-      console.log(updateUserResponse);
+    if (updateObjectResponse) {
       refresh();
     }
-  }, [updateUserResponse]);
+  }, [updateObjectResponse]);
   //-------------------------------------------------------------------------------------------
 
   return (
@@ -124,7 +121,9 @@ export const EditModal = ({
                           labelPlacement={"outside"}
                           label={key}
                           defaultInputValue={value}
-                          onChange={(e) => handleChange(key, e.target.value)}
+                          onInputChange={(selectedValue) =>
+                            handleChange(key, selectedValue)
+                          }
                         >
                           {enumsOptions![key]?.map((option: string) => {
                             return (
@@ -142,7 +141,9 @@ export const EditModal = ({
                           <span className="mr-2">{key}</span>
                           <Checkbox
                             defaultSelected={value}
-                            onChange={(e) => handleChange(key, e.target.value)}
+                            onChange={(isSelected) =>
+                              handleChange(key, isSelected.target.checked)
+                            }
                           />
                         </div>
                       );

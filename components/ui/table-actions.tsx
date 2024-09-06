@@ -29,9 +29,9 @@ export const TableActions = ({
   identfier: string;
   refresh: () => void;
   endpoints?: {
-    edit: string;
-    delete: string;
-    getDetails: string;
+    edit?: string;
+    delete?: string;
+    getDetails?: string;
   };
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -44,12 +44,12 @@ export const TableActions = ({
 
   //-----------------------useMutation hook to get a user details --------------------------------
   const {
-    data: getUserDetailsResponse,
-    isPending: getUserDetailsIsPending,
-    isSuccess: getUserDetailsIsSuccess,
-    isError: getUserDetailsIsError,
-    error: getUserDetailsError,
-    mutate: getUserDetailsMutate,
+    data: getObjectDetailsResponse,
+    isPending: getObjectDetailsIsPending,
+    isSuccess: getObjectDetailsIsSuccess,
+    isError: getObjectDetailsIsError,
+    error: getObjectDetailsError,
+    mutate: getObjectDetailsMutate,
   } = useMutation({
     mutationFn: async (params: { id: string }) => {
       return AxiosInstance.get(`${endpoints?.getDetails}${params.id}`);
@@ -57,26 +57,26 @@ export const TableActions = ({
   });
 
   const getUserDetails = (orderId: string) => {
-    getUserDetailsMutate({
+    getObjectDetailsMutate({
       id: orderId,
     });
   };
 
   useEffect(() => {
-    if (getUserDetailsResponse) {
-      console.log(getUserDetailsResponse);
+    if (getObjectDetailsResponse) {
+      console.log(getObjectDetailsResponse);
     }
-  }, [getUserDetailsResponse]);
+  }, [getObjectDetailsResponse]);
   //-------------------------------------------------------------------------------------------
 
-  //-----------------------useMutation hook to delete a user --------------------------------
+  //-----------------------useMutation hook to delete an object --------------------------------
   const {
-    data: deleteUserResponse,
-    isPending: deleteUserIsPending,
-    isSuccess: deleteUserIsSuccess,
-    isError: deleteUserIsError,
-    error: deleteUserError,
-    mutate: deleteUserMutate,
+    data: deleteObjectResponse,
+    isPending: deleteObjectIsPending,
+    isSuccess: deleteObjectIsSuccess,
+    isError: deleteObjectIsError,
+    error: deleteObjectError,
+    mutate: deleteObjectMutate,
   } = useMutation({
     mutationFn: async (params: { id: string }) => {
       return AxiosInstance.delete(`${endpoints?.delete}${params.id}`);
@@ -84,17 +84,17 @@ export const TableActions = ({
   });
 
   const deleteOrder = (id: string) => {
-    deleteUserMutate({
+    deleteObjectMutate({
       id,
     });
   };
 
   useEffect(() => {
-    if (deleteUserResponse) {
-      console.log(deleteUserResponse);
+    if (deleteObjectResponse) {
+      console.log(deleteObjectResponse);
       refresh();
     }
-  }, [deleteUserResponse]);
+  }, [deleteObjectResponse]);
   //-------------------------------------------------------------------------------------------
 
   return (
@@ -127,7 +127,7 @@ export const TableActions = ({
       </Dropdown>
 
       <EditModal
-        row={getUserDetailsResponse?.data}
+        row={getObjectDetailsResponse?.data}
         isOpen={isOpen}
         onOpen={onOpen}
         onOpenChange={onOpenChange}
