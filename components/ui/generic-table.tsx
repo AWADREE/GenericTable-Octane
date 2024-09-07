@@ -13,8 +13,9 @@ import {
   // PaginationItem,
   // PaginationCursor,
 } from "@nextui-org/pagination";
+import TableSkeleton from "./table-skeleton";
 type GenericTableProps<T extends Record<PropertyKey, any>> = {
-  data: T[];
+  data: any[];
   types: Types;
   specialFields?: {
     specialFieldName: PropertyKey;
@@ -28,6 +29,7 @@ type GenericTableProps<T extends Record<PropertyKey, any>> = {
   enumsOptions?: { [key: PropertyKey]: string[] };
   extraColumns?: string[];
   identfier: string;
+  loadingState: boolean;
 };
 
 const GenericTable = <T extends Record<PropertyKey, any>>({
@@ -37,9 +39,12 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
   enumsOptions = {},
   extraColumns = [],
   identfier,
+  loadingState,
 }: GenericTableProps<T>) => {
   const headers =
-    data?.length > 0 ? [...Object?.keys(data[0]), ...extraColumns] : ["N/A"];
+    data && data?.length > 0
+      ? [...Object?.keys(data[0]), ...extraColumns]
+      : [...Object?.keys(types), ...extraColumns];
 
   const allSpecialFieldNames = specialFields?.map((field) => {
     return field.specialFieldName;
@@ -67,8 +72,10 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
   }, [page, data]);
 
   return (
-    <>
-      <div>
+    <div>
+      {loadingState ? (
+        <TableSkeleton rowCount={data.length} />
+      ) : (
         <Table
           bottomContent={
             <div className="flex w-full justify-center fixed bottom-12">
@@ -94,6 +101,7 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
                 <TableColumn key={`${header}${index}}`}>{header}</TableColumn>
               ))}
           </TableHeader>
+
           <TableBody>
             {items &&
               items?.map((row, rowIndex) => (
@@ -111,7 +119,7 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
 
                       if (allSpecialFieldNames?.includes(header)) {
                         return (
-                          <TableCell>
+                          <TableCell key={`${header}-${rowIndex}`}>
                             {specialObject?.rendering(
                               row,
                               types,
@@ -149,8 +157,12 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
               ))}
           </TableBody>
         </Table>
-      </div>
-    </>
+      )}
+
+      {items.length === 0 && (
+        <div className="absolute top-[47.5%] left-[47.5%]">No Data Found!</div>
+      )}
+    </div>
   );
 };
 
