@@ -39,7 +39,7 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
   identfier,
 }: GenericTableProps<T>) => {
   const headers =
-    data?.length > 0 ? [...Object?.keys(data[0]), ...extraColumns] : [];
+    data?.length > 0 ? [...Object?.keys(data[0]), ...extraColumns] : ["N/A"];
 
   const allSpecialFieldNames = specialFields?.map((field) => {
     return field.specialFieldName;
@@ -89,55 +89,64 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
           selectionMode="multiple"
         >
           <TableHeader>
-            {headers?.map((header) => (
-              <TableColumn key={header}>{header}</TableColumn>
-            ))}
+            {headers &&
+              headers?.map((header, index) => (
+                <TableColumn key={`${header}${index}}`}>{header}</TableColumn>
+              ))}
           </TableHeader>
           <TableBody>
-            {items?.map((row, rowIndex) => (
-              <TableRow key={rowIndex} style={{ cursor: "pointer" }}>
-                {headers?.map((header) => {
-                  const cellValue = row[header];
-                  const columnType = types[header] || ColumnType.Text;
+            {items &&
+              items?.map((row, rowIndex) => (
+                <TableRow key={rowIndex} style={{ cursor: "pointer" }}>
+                  {headers &&
+                    headers?.map((header) => {
+                      const cellValue = row[header];
+                      const columnType = types[header] || ColumnType.Text;
 
-                  let cellContent;
+                      let cellContent;
 
-                  const specialObject = specialFields?.find((item) => {
-                    return item?.specialFieldName === header;
-                  });
+                      const specialObject = specialFields?.find((item) => {
+                        return item?.specialFieldName === header;
+                      });
 
-                  if (allSpecialFieldNames?.includes(header)) {
-                    return (
-                      <TableCell>
-                        {specialObject?.rendering(
-                          row,
-                          types,
-                          identfier,
-                          enumsOptions
-                        )}
-                      </TableCell>
-                    );
-                  }
+                      if (allSpecialFieldNames?.includes(header)) {
+                        return (
+                          <TableCell>
+                            {specialObject?.rendering(
+                              row,
+                              types,
+                              identfier,
+                              enumsOptions
+                            )}
+                          </TableCell>
+                        );
+                      }
 
-                  switch (columnType) {
-                    case ColumnType.Number:
-                      cellContent = cellValue.toLocaleString();
-                      break;
-                    case ColumnType.Date:
-                      cellContent = new Date(cellValue).toLocaleDateString();
-                      break;
-                    case ColumnType.JSX:
-                      cellContent = cellValue;
-                      break;
-                    default:
-                      cellContent = cellValue.toString();
-                      break;
-                  }
+                      switch (columnType) {
+                        case ColumnType.Number:
+                          cellContent = cellValue.toLocaleString();
+                          break;
+                        case ColumnType.Date:
+                          cellContent = cellValue
+                            ? new Date(cellValue).toLocaleDateString()
+                            : "N/A";
+                          break;
+                        case ColumnType.JSX:
+                          cellContent = cellValue;
+                          break;
+                        default:
+                          cellContent = cellValue.toString();
+                          break;
+                      }
 
-                  return <TableCell key={header}>{cellContent}</TableCell>;
-                })}
-              </TableRow>
-            ))}
+                      return (
+                        <TableCell key={`${header}-${rowIndex}`}>
+                          {cellContent}
+                        </TableCell>
+                      );
+                    })}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>
