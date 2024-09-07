@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/navbar";
 import { Link } from "@nextui-org/link";
 
-const Navigationbar = () => {
+const NavigationBar = () => {
   const pathname = usePathname();
 
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -26,12 +26,12 @@ const Navigationbar = () => {
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
+        <NavbarItem data-testid="users-navitem">
           <Link color={pathname !== "/" ? "foreground" : "primary"} href="/">
             Users
           </Link>
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem data-testid="orders-navitem">
           <Link
             color={pathname !== "/orders" ? "foreground" : "primary"}
             href="/orders"
@@ -68,4 +68,4 @@ const Navigationbar = () => {
   );
 };
 
-export default Navigationbar;
+export default NavigationBar;
