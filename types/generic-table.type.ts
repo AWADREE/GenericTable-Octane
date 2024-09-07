@@ -4,6 +4,7 @@ export enum ColumnType {
   Date = "date",
   JSX = "jsx",
   Enum = "enum",
+  Boolean = "boolean",
 }
 
 export type Types = {

@@ -13,30 +13,38 @@ import {
   // PaginationItem,
   // PaginationCursor,
 } from "@nextui-org/pagination";
+import TableSkeleton from "./table-skeleton";
 type GenericTableProps<T extends Record<PropertyKey, any>> = {
-  data: T[];
+  data: any[];
   types: Types;
   specialFields?: {
     specialFieldName: PropertyKey;
     rendering: (
       row: { [key: PropertyKey]: any },
       types: Types,
+      identfier: string,
       enumsOptions?: { [key: PropertyKey]: string[] }
     ) => ReactNode;
   }[];
   enumsOptions?: { [key: PropertyKey]: string[] };
   extraColumns?: string[];
+  identfier: string;
+  loadingState: boolean;
 };
 
 const GenericTable = <T extends Record<PropertyKey, any>>({
-  data,
+  data = [],
   types,
   specialFields,
   enumsOptions = {},
   extraColumns = [],
+  identfier,
+  loadingState,
 }: GenericTableProps<T>) => {
   const headers =
-    data.length > 0 ? [...Object.keys(data[0]), ...extraColumns] : [];
+    data && data?.length > 0
+      ? [...Object?.keys(data[0]), ...extraColumns]
+      : [...Object?.keys(types), ...extraColumns];
 
   const allSpecialFieldNames = specialFields?.map((field) => {
     return field.specialFieldName;
@@ -54,18 +62,20 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 8;
 
-  const pages = Math.ceil(data.length / rowsPerPage);
+  const pages = Math.ceil(data?.length / rowsPerPage);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return data.slice(start, end);
+    return data?.slice(start, end);
   }, [page, data]);
 
   return (
-    <>
-      <div>
+    <div>
+      {loadingState ? (
+        <TableSkeleton rowCount={data.length} />
+      ) : (
         <Table
           bottomContent={
             <div className="flex w-full justify-center fixed bottom-12">
@@ -86,54 +96,73 @@ const GenericTable = <T extends Record<PropertyKey, any>>({
           selectionMode="multiple"
         >
           <TableHeader>
-            {headers.map((header) => (
-              <TableColumn key={header}>{header}</TableColumn>
-            ))}
+            {headers &&
+              headers?.map((header, index) => (
+                <TableColumn key={`${header}${index}}`}>{header}</TableColumn>
+              ))}
           </TableHeader>
+
           <TableBody>
-            {items.map((row, rowIndex) => (
-              <TableRow key={rowIndex} style={{ cursor: "pointer" }}>
-                {headers.map((header) => {
-                  const cellValue = row[header];
-                  const columnType = types[header] || ColumnType.Text;
+            {items &&
+              items?.map((row, rowIndex) => (
+                <TableRow key={rowIndex} style={{ cursor: "pointer" }}>
+                  {headers &&
+                    headers?.map((header) => {
+                      const cellValue = row[header];
+                      const columnType = types[header] || ColumnType.Text;
 
-                  let cellContent;
+                      let cellContent;
 
-                  const specialObject = specialFields?.find((item) => {
-                    return item.specialFieldName === header;
-                  });
+                      const specialObject = specialFields?.find((item) => {
+                        return item?.specialFieldName === header;
+                      });
 
-                  if (allSpecialFieldNames?.includes(header)) {
-                    return (
-                      <TableCell>
-                        {specialObject?.rendering(row, types, enumsOptions)}
-                      </TableCell>
-                    );
-                  }
+                      if (allSpecialFieldNames?.includes(header)) {
+                        return (
+                          <TableCell key={`${header}-${rowIndex}`}>
+                            {specialObject?.rendering(
+                              row,
+                              types,
+                              identfier,
+                              enumsOptions
+                            )}
+                          </TableCell>
+                        );
+                      }
 
-                  switch (columnType) {
-                    case ColumnType.Number:
-                      cellContent = cellValue.toLocaleString();
-                      break;
-                    case ColumnType.Date:
-                      cellContent = new Date(cellValue).toLocaleDateString();
-                      break;
-                    case ColumnType.JSX:
-                      cellContent = cellValue;
-                      break;
-                    default:
-                      cellContent = cellValue.toString();
-                      break;
-                  }
+                      switch (columnType) {
+                        case ColumnType.Number:
+                          cellContent = cellValue.toLocaleString();
+                          break;
+                        case ColumnType.Date:
+                          cellContent = cellValue
+                            ? new Date(cellValue).toLocaleDateString()
+                            : "N/A";
+                          break;
+                        case ColumnType.JSX:
+                          cellContent = cellValue;
+                          break;
+                        default:
+                          cellContent = cellValue.toString();
+                          break;
+                      }
 
-                  return <TableCell key={header}>{cellContent}</TableCell>;
-                })}
-              </TableRow>
-            ))}
+                      return (
+                        <TableCell key={`${header}-${rowIndex}`}>
+                          {cellContent}
+                        </TableCell>
+                      );
+                    })}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
-      </div>
-    </>
+      )}
+
+      {items.length === 0 && (
+        <div className="absolute top-[47.5%] left-[47.5%]">No Data Found!</div>
+      )}
+    </div>
   );
 };
 
