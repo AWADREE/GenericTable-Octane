@@ -8,18 +8,12 @@ import { useMutation } from "@tanstack/react-query";
 import AxiosInstance from "@/api/axiosInstance";
 import { baseURL } from "@/api/baseURL";
 import Endpoints from "@/api/Endpoints";
-
-// const exampleData = [
-//   {
-//     user_id: 1,
-//     username: "name",
-//     email: "name@email.com",
-//     role: "user",
-//     active: true,
-//   },
-// ];
+import useStore from "@/stores/useStore";
 
 export default function page() {
+  const users = useStore((state) => state.users);
+  const setUsers = useStore((state) => state.setUsers);
+
   ////------------------useMutation hook to get all users ------------------------------
   const {
     data: getUsersResponse,
@@ -41,6 +35,7 @@ export default function page() {
   useEffect(() => {
     if (getUsersResponse) {
       console.log(getUsersResponse?.data);
+      setUsers(getUsersResponse?.data);
     }
   }, [getUsersResponse]);
   //-------------------------------------------------------------------------------------------
@@ -68,9 +63,7 @@ export default function page() {
           },
         ]}
         extraColumns={["Actions"]}
-        data={
-          getUsersResponse?.data ? getUsersResponse.data : [{ user_id: "0" }]
-        }
+        data={users ? users : [{ user_id: "0" }]}
         types={{
           user_id: ColumnType.Text,
           username: ColumnType.Text,

@@ -8,8 +8,12 @@ import { baseURL } from "@/api/baseURL";
 import Endpoints from "@/api/Endpoints";
 import { useMutation } from "@tanstack/react-query";
 import AxiosInstance from "@/api/axiosInstance";
+import useStore from "@/stores/useStore";
 
 export default function page() {
+  const orders = useStore((state) => state.orders);
+  const setOrders = useStore((state) => state.setOrders);
+
   ////------------------useMutation hook to get all orders ------------------------------
   const {
     data: getOrdersResponse,
@@ -31,6 +35,7 @@ export default function page() {
   useEffect(() => {
     if (getOrdersResponse) {
       console.log(getOrdersResponse?.data);
+      setOrders(getOrdersResponse?.data);
     }
   }, [getOrdersResponse]);
   //-------------------------------------------------------------------------------------------
@@ -58,9 +63,7 @@ export default function page() {
           },
         ]}
         extraColumns={["Actions"]}
-        data={
-          getOrdersResponse?.data ? getOrdersResponse.data : [{ order_id: "0" }]
-        }
+        data={orders ? orders : [{ order_id: "0" }]}
         types={{
           order_id: ColumnType.Text,
           customer_name: ColumnType.Text,
