@@ -1,53 +1,122 @@
-# Next.js & NextUI Template
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
+# Octane Dashboard - Technical Task
 
-[Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
+This project is part of the Octane dashboard expansion, which adds two new screens to the dashboard: "Orders Overview" for the sales team and "User Management" for the admin team. The project is built using Next.js, Tailwind CSS, and NextUI, with a reusable table component and integrated API for data fetching.
 
-## Technologies Used
+## Table of Contents
 
-- [Next.js 14](https://nextjs.org/docs/getting-started)
-- [NextUI v2](https://nextui.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [next-themes](https://github.com/pacocoursey/next-themes)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [API Integration](#api-integration)
+- [Testing](#testing)
+- [Code Structure](#code-structure)
+- [State Management](#state-management)
+- [Additional Considerations](#additional-considerations)
 
-## How to Use
+## Features
 
-### Use the template with create-next-app
+- **Orders Overview**: Allows the sales team to manage customer orders with functionalities like viewing order details, updating statuses, and deleting orders.
+- **User Management**: Allows admins to manage user accounts, including editing user details, activating/deactivating accounts, and deleting users.
+- **Reusable Table Component**: A highly configurable table component designed for reuse across different parts of the application.
+- **State Management**: Efficient management of application state, ensuring smooth user interactions.
+- **API Integration**: Seamless interaction with mock APIs for data fetching, status updates, and deletions.
 
-To create a new project based on this template using `create-next-app`, run the following command:
+## Technologies
+
+- **Framework**: [Next.js](https://nextjs.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/), [NextUI](https://nextui.org/)
+- **State Management**: React hooks, Next.js built-in state management
+- **TypeScript**: Strongly typed components and APIs
+
+## Installation
+
+### Prerequisites
+
+- Node.js (>=14.x.x)
+- npm or yarn
+
+### Clone the Repository
 
 ```bash
-npx create-next-app -e https://github.com/nextui-org/next-app-template
+git clone https://github.com/your-repo/octane-dashboard.git
+cd octane-dashboard
 ```
 
-### Install dependencies
-
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
+### Install Dependencies
 
 ```bash
 npm install
+# or
+yarn install
 ```
 
-### Run the development server
+## Running the Application
+
+### Development Mode
 
 ```bash
 npm run dev
+# or
+yarn dev
 ```
 
-### Setup pnpm (optional)
+The application will start in development mode and can be accessed at `http://localhost:3000`.
 
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
+### Build for Production
 
 ```bash
-public-hoist-pattern[]=*@nextui-org/*
+npm run build
+npm run start
 ```
 
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+This command builds the app for production and serves it.
 
-## License
+## API Integration
 
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
+The data for the Orders Overview and User Management screens is fetched from mock REST APIs. You can set up a local JSON server to mock the API responses:
+
+1. Install JSON Server:
+
+   ```bash
+   npm install -g json-server
+   ```
+
+2. Run JSON Server:
+
+   ```bash
+   json-server --watch db.json --port 5000
+   ```
+
+   Ensure that your APIs are pointing to `http://localhost:5000` in the application.
+
+## Testing
+
+Automated tests have been implemented using React Testing Library and Jest. To run the tests:
+
+```bash
+npm run test
+```
+
+Ensure all tests pass, including tests for rendering components, state management, and API interactions.
+
+## Code Structure
+
+- `/components`: Reusable components like the table and form components.
+- `/pages/orders`: Orders Overview page with table and order actions.
+- `/pages/users`: User Management page with table and user actions.
+- `/utils`: Utility functions, types, and API functions.
+
+## State Management
+
+State management is handled via React hooks and Next.js API routes. The state is shared between components where necessary to ensure consistency and a smooth user experience.
+
+- **Order state**: Managed at the screen level, with actions for fetching, updating, and deleting orders.
+- **User state**: Managed similarly, with actions for activating/deactivating accounts and editing user details.
+
+## Additional Considerations
+
+- **Responsiveness**: The UI is fully responsive and optimized for different screen sizes.
+- **Accessibility**: The application follows basic accessibility guidelines to ensure usability for all users.
+- **Commit History**: Commits are descriptive and follow best practices to provide a clear history of the project development.
