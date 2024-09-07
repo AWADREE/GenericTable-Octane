@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Navigationbar from "@/components/ui/navigationbar";
+import NavigationBar from "@/components/ui/navigation-bar";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +26,7 @@ export default function RootLayout({
           <title></title>
         </head>
         <body className={`${inter.className} p-3`}>
-          <Navigationbar />
+          <NavigationBar />
           {children}
         </body>
       </html>
