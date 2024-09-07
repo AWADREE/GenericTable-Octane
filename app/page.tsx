@@ -10,7 +10,7 @@ import { baseURL } from "@/api/baseURL";
 import Endpoints from "@/api/Endpoints";
 import useStore from "@/stores/useStore";
 
-export default function page() {
+export default function UsersPage() {
   const users = useStore((state) => state.users);
   const setUsers = useStore((state) => state.setUsers);
 

@@ -153,7 +153,7 @@ import useStore from "@/stores/useStore";
 //   },
 // ];
 
-export default function page() {
+export default function OrdersPage() {
   const orders = useStore((state) => state.orders);
   const setOrders = useStore((state) => state.setOrders);
 
