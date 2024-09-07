@@ -27,7 +27,7 @@ This project is part of the Octane dashboard expansion, which adds two new scree
 
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/), [NextUI](https://nextui.org/)
-- **State Management**: React hooks, Next.js built-in state management
+- **State Management**: Zustand state management
 - **TypeScript**: Strongly typed components and APIs
 
 ## Installation
@@ -40,8 +40,8 @@ This project is part of the Octane dashboard expansion, which adds two new scree
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-repo/octane-dashboard.git
-cd octane-dashboard
+git clone https://github.com/AWADREE/GenericTable-Octane
+cd GenericTable-Octane
 ```
 
 ### Install Dependencies
@@ -93,27 +93,26 @@ The data for the Orders Overview and User Management screens is fetched from moc
 
 ## Testing
 
-Automated tests have been implemented using React Testing Library and Jest. To run the tests:
+Automated tests have been implemented using Cypress. To run the tests:
 
 ```bash
-npm run test
+npm run cy
+npm run cy:open
 ```
 
 Ensure all tests pass, including tests for rendering components, state management, and API interactions.
 
 ## Code Structure
 
-- `/components`: Reusable components like the table and form components.
-- `/pages/orders`: Orders Overview page with table and order actions.
-- `/pages/users`: User Management page with table and user actions.
-- `/utils`: Utility functions, types, and API functions.
+- `/orders`: Orders Overview page with table and order actions.
+- `/`: User Management page with table and user actions.
 
 ## State Management
 
-State management is handled via React hooks and Next.js API routes. The state is shared between components where necessary to ensure consistency and a smooth user experience.
+State management is handled via Zustand and Next.js API routes. The state is shared between components where necessary to ensure consistency and a smooth user experience.
 
-- **Order state**: Managed at the screen level, with actions for fetching, updating, and deleting orders.
-- **User state**: Managed similarly, with actions for activating/deactivating accounts and editing user details.
+- **orders state**: Managed at the screen level, with actions for fetching, updating, and deleting orders.
+- **users state**: Managed similarly, with actions for activating/deactivating accounts and editing user details.
 
 ## Additional Considerations
 
